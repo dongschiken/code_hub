@@ -10,6 +10,8 @@ import java.util.TreeMap;
 public class Main {
 
 	public static void main(String[] args) throws IOException, NumberFormatException {
+		// TreeMap을 사용하면 contains()를 사용했을때 엄청 빠른 속도로 검색작업이 이루어진다.
+		// 그래서 key를 이용해서 같은값이 있을때 value값을 0으로 바꿔서 출력
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		String s = new String();
@@ -19,6 +21,7 @@ public class Main {
 		for (int i = 0; i < l_size; i++) {
 			ls_map.put(br.readLine(), 1 );
 		}
+		// s가  ls_map에 이미 있는 값일경우 value를 0으로 바꾼다. ( 듣과 보가 둘다 입력될 경우 0으로 바꾸는 로직 )
 		for (int i = 0; i < s_size; i++) {
 		s = br.readLine();
 		if(ls_map.containsKey(s)) {
