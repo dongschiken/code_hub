@@ -2,8 +2,9 @@ import java.util.*;
 import java.io.*;
 
 class Solution {
-    public int solution(String t, String p) throws NumberFormatException, IndexOutOfBoundsException {
-		int answer = 0;
+    public int solution(String t, String p) {
+        int answer = 0;
+        try{
 		String[] check_arr = new String[ t.length()-(p.length()-1)];
 		for (int i = 0; i < t.length()-(p.length()-1); i++) {
 			check_arr[i] = "";
@@ -16,6 +17,13 @@ class Solution {
 				answer++;
 			}
 		}
+            
+        } catch(NumberFormatException n){
+            n.printStackTrace();
+        } catch(IndexOutOfBoundsException i){
+            i.printStackTrace();
+        }
+		
         return answer;
     }
 }
