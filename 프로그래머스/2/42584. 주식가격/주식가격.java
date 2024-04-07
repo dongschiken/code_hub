@@ -16,7 +16,7 @@ class Solution {
 				count++;
 				if( prices[j+i+1] >= now_price ) {
 					answer[i] = count;			
-					continue;
+					
 				}else if( prices[j+i+1] < now_price) {
 					answer[i] = count;		
 					continue OUT;
