@@ -45,7 +45,7 @@ class Solution {
             bridge.offer(new int[]{temp_deque, 1});
 
 
-
+        //
         }
         return answer = second+1;
     }
