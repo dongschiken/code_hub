@@ -1,38 +1,30 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] tempInt = new int[3];
-        String[] str = new String[3];
-        String[] temp = new String[3];
+
+        int[] temp = new int[3];
+        HashMap<String, Integer> abcMap = new HashMap<>();
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < 3; i++) {
-            tempInt[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < temp.length; i++) {
+            temp[i] = Integer.parseInt(st.nextToken());
         }
+        Arrays.sort(temp);
 
-        Arrays.sort(tempInt);
-        for (int i = 0; i < 3; i++) {
-            str[i] = tempInt[i]+"";
-        }
+        abcMap.put("A", temp[0]);
+        abcMap.put("B", temp[1]);
+        abcMap.put("C", temp[2]);
+
         String abc = br.readLine();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 3; i++) {
-            str[i] = (char)('A'+i)+str[i];
-            temp[i] = abc.charAt(i)+"";
-
+            sb.append(abcMap.get(abc.charAt(i)+"")+" ");
         }
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if( str[j].contains(temp[i])){
-                    System.out.print(str[j].substring(1)+" ");
-                }
-            }
-        }
+        System.out.println(sb);
     }
 }
