@@ -1,15 +1,14 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Main {
 	
 	static char[] len;
 	
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		String input;
 		StringBuilder sb;
 		while ( ( input = br.readLine()) != null ) {
@@ -26,11 +25,12 @@ public class Main {
 			recursion_canto( start , length);
 			
 			for (int i = 0; i < length; i++) {
-				sb.append(len[i]+"");
+				bw.write(len[i]+"");
 			}
-			System.out.println(sb);
+			bw.write("\n");
+			
 		}
-		
+		bw.flush();
 	}
 	
 	private static void recursion_canto(int start, int length) {
