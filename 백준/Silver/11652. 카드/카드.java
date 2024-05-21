@@ -1,9 +1,11 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -18,21 +20,19 @@ public class Main {
 		
 		LinkedHashMap<Long, ArrayList<Integer>> cardMap = new LinkedHashMap<Long, ArrayList<Integer>>();
 		
-		ArrayList<Long> tempList = new ArrayList();
+		long[] tempArr = new long[testcase];
 		
 		for (int i = 0; i < testcase; i++) {
-			long temp = Long.parseLong(br.readLine());
-			
-			tempList.add(temp);
+			tempArr[i] = Long.parseLong(br.readLine());
 			
 		}
 		
-		Collections.sort(tempList);
+		Arrays.sort(tempArr);
 		
 		for (int i = 0; i < testcase; i++) {
-			cardMap.putIfAbsent(tempList.get(i), new ArrayList() );
+			cardMap.putIfAbsent(tempArr[i], new ArrayList() );
 			
-			cardMap.get(tempList.get(i)).add(1);
+			cardMap.get(tempArr[i]).add(1);
 		}
 		
 		int temp = 0;
