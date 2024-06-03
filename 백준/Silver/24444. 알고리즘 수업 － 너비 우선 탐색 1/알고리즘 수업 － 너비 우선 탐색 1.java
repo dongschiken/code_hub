@@ -48,9 +48,11 @@ public class Main {
 		queue.offer(start);
 		bfs(grape, visited, start, queue);
 		for (int i = 1; i < visited.length; i++) {
-			System.out.println(visited[i]);
+			bw.write(visited[i]+"\n");
 		}
-		
+		bw.flush();
+        bw.close();
+        br.close();
 	}
 
 	private static void bfs(ArrayList[] grape, int[] visited, int start, Queue<Integer> queue) throws IOException {
