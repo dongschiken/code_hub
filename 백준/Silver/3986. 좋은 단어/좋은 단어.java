@@ -12,16 +12,13 @@ public class Main {
 		for (int i = 0; i < N; i++) {
 			
 			char[] temp = br.readLine().toCharArray();
-			int c_length = 0;
+			int c_length = 1;
+			stack.push(temp[0]);
 			while (c_length < temp.length) {
-				stack.push(temp[c_length]);
-				if(stack.size() >= 2) {
-					char c1 = stack.pop();
-					char c2 = stack.pop();
-					if(c1 != c2) {
-						stack.push(c2);
-						stack.push(c1);
-					}
+				if( stack.isEmpty() || stack.peek() != temp[c_length]) {
+					stack.push(temp[c_length]);
+				}else {
+					stack.pop();
 				}
 				c_length++;
 			}
