@@ -11,19 +11,20 @@ public class Main {
 		int N = Integer.parseInt(br.readLine());
 		for (int i = 0; i < N; i++) {
 			
-			char[] temp = br.readLine().toCharArray();
+			String temp = br.readLine();
 			int c_length = 1;
-			stack.push(temp[0]);
-			while (c_length < temp.length) {
-				if( stack.isEmpty() || stack.peek() != temp[c_length]) {
-					stack.push(temp[c_length]);
+			stack.push(temp.charAt(0));
+			while (c_length < temp.length()) {
+				char c_temp = temp.charAt(c_length);
+				if( stack.isEmpty() || stack.peek() != c_temp) {
+					stack.push(temp.charAt(c_length));
 				}else {
 					stack.pop();
 				}
 				c_length++;
 			}
 			if(stack.isEmpty()) count++;
-			stack.clear();
+			else stack.clear(); // else를 빼는게 더빠름 왜??
 		}
 		bw.write(count+"");
 		bw.flush();
