@@ -7,7 +7,7 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
 		int N = Integer.parseInt(br.readLine());
-		int[][] arr = new int[1001][1001];
+		int[][] arr = new int[1002][1002];
 		ArrayList<int[]> list = new ArrayList<int[]>();
 		StringTokenizer st;
 		for (int i = 0; i < N; i++) {
