@@ -14,8 +14,8 @@ public class Main {
 			int startY = Integer.parseInt(st.nextToken());
 			int endX = Integer.parseInt(st.nextToken());
 			int endY = Integer.parseInt(st.nextToken());
-			for (int j = startX; j < endX; j++) {
-				for (int j2 = startY; j2 < endY; j2++) {
+			for (int j = startY; j < endY; j++) {
+				for (int j2 = startX; j2 < endX; j2++) {
 					if( arr[j][j2] != 1 ) {
 						arr[j][j2] = 1;
 					}
