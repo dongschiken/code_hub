@@ -3,7 +3,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -48,14 +47,16 @@ public class Main {
 		
 		int whiteBoardSum = 0;
 		int count;
+		int white = 0;
 		for (int k = i; k < 8+i; k++) {
 			count = 0;
 			for (int k2 = j; k2 < 8+j; k2++) {
                  // 체스판을 8 칸씩 순회하면서 흰색 체스칸이 시작인 배열과 비교
-				if(chessBoard[k].charAt(k2) != whiteBoard[k%2][count++]) {
+				if(chessBoard[k].charAt(k2) != whiteBoard[white%2][count++]) {
 					whiteBoardSum += 1;
 				}
 			}
+			white++;
 		}
         // 만약 흰 체스칸이 시작인 체스판 검사 결과가 나왔을때
         // 64칸 - 흰 체스판을 해주면 검은 체스칸이 시작인 체스판 검사 결과가 나온다.
