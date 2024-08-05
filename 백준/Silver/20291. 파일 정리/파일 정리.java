@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -23,20 +22,14 @@ public class Main {
 		int T = Integer.parseInt(br.readLine());
 		for (int i = 0; i < T; i++) {
 			String[] temp = br.readLine().split("\\.");
-			if(hm.containsKey(temp[1])) {
-				int n = hm.get(temp[1]);
-				hm.put(temp[1], ++n);
-			}else {
-				hm.put(temp[1], 1);
-			}	
+			hm.compute(temp[1], 
+					(K, V) -> V == null ? 1 : ++V);
 		}
-		
 		List<String> list = new ArrayList<>();
 		Set<Entry<String, Integer>> se = hm.entrySet();
 		Iterator<Entry<String, Integer>> ir =se.iterator();
 		while (ir.hasNext()) {
 			Entry<String, Integer> entry = ir.next();
-			
 			list.add(entry.getKey() +" "+ entry.getValue());
 		}
 		Collections.sort(list);
