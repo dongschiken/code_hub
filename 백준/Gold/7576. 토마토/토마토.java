@@ -3,110 +3,65 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-
-	static int[] dx = {1, -1, 0, 0};
-	static int[] dy = {0, 0, 1, -1};
-
-	public static void main(String[] args) throws IOException, NumberFormatException {
+	static int[] dr = {1, -1, 0, 0};
+	static int[] dc = {0, 0, 1, -1};
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		int[][] grape;
-		int[][] value;
-
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int width = Integer.parseInt(st.nextToken());
-		int height = Integer.parseInt(st.nextToken());
-		grape = new int[height][width];
-		value = new int[height][width];
-		Queue<Position> queue = new ArrayDeque<Position>();
+		Queue<int[]> queue = new LinkedList<>(); 
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int[][] map = new int[M][N];
+		int[][] visited = new int[M][N];
 		
-		for (int i = 0; i < height; i++) {
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			for (int j = 0; j < width; j++) {
-				int temp = Integer.parseInt(st.nextToken());
-				grape[i][j] = temp;
-				if(temp == 1) {
-					Position position = new Position(j, i);
-					queue.add(position);
-				}
+			for (int j = 0; j < N; j++) {
+				map[i][j] = Integer.parseInt(st.nextToken());
+				if(map[i][j] == 1) queue.offer(new int[] {i, j}); // 만약 1이라면 탐색 시작할 지점이니까 큐에 넣어놓는다.
 			}
 		}
 		
-		bw.write(bfs(grape, value, queue, width, height)+"");
-		bw.flush();
-	}
-
-	private static int bfs(int[][] grape, int[][] value, Queue<Position> queue, int width, int height) {
+		bfs(map, visited, queue);
+		
 		int max = 0;
+		for (int i = 0; i < M; i++) {
+			for (int j = 0; j < N; j++) {
+				if(map[i][j] == 0) {
+					System.out.println(-1);
+					return;
+				}
+				max = Math.max(max, map[i][j]);
+			}
+		}
+		System.out.print(max-1);
+	}
+	private static void bfs(int[][] map, int[][] visited, Queue<int[]> queue) {
 		
 		while (!queue.isEmpty()) {
-			Position position = queue.poll();
-			int curX = position.getX();
-			int curY = position.getY();
+			
+			int[] cur = queue.poll();
+			int r = cur[0];
+			int c = cur[1];
+			visited[r][c] = 1;
 			
 			for (int i = 0; i < 4; i++) {
-				int newX = curX + dx[i];
-				int newY = curY + dy[i];
+				int nr = r+dr[i];
+				int nc = c+dc[i];
 				
-				if(newX >= 0 && newX < width && newY >= 0 && newY < height && grape[newY][newX] != 1 && grape[newY][newX] != -1) {
-					// 방문처리
-					grape[newY][newX] = 1;
-					value[newY][newX] = value[curY][curX] + 1;
-					// 새로운 위치값
-					queue.offer(new Position(newX, newY));
-					max = Math.max(max, value[newY][newX]);
-				}
-			}	
-		}
-		// 0인 값이 하나라도 있다면 ( 방문 안한곳 )
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j < width; j++) {
-				if(grape[i][j] == 0) {
-					return -1;
+				if(nr >= 0 && nr < map.length && nc >= 0 && nc < map[0].length && visited[nr][nc] != 1 && map[nr][nc] == 0) {
+					visited[nr][nc] = 1;
+					map[nr][nc] = map[r][c]+1;
+					queue.offer(new int[] {nr, nc});
 				}
 			}
 		}
-		return max;
 	}
-}
-
-class Position{
-
-	int x;
-	int y;
-	
-	public Position() {
-		super();
-	}
-
-	public Position(int x, int y) {
-		super();
-		this.x = x;
-		this.y = y;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-	
-	
-	
-	
 }
