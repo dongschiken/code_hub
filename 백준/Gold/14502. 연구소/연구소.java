@@ -74,6 +74,7 @@ public class Main {
 				}
 			}
 		}
+		
 		while (!queue.isEmpty()) {
 			int[] temp = queue.poll();
 			int r = temp[0];
