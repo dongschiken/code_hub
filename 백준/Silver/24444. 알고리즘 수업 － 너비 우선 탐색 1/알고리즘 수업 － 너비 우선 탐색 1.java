@@ -8,67 +8,71 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int count = 1;
+	
+	static List<Integer>[] list;
+	static int[] visited;
+	static Queue<Integer> queue;
+	static int cnt = 1;
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		
-		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int node = Integer.parseInt(st.nextToken());
-		int link = Integer.parseInt(st.nextToken());
-		int start = Integer.parseInt(st.nextToken());
 		
-		ArrayList<Integer>[] grape = new ArrayList[node+1];
-		int[] visited = new int[node+1];
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int S = Integer.parseInt(st.nextToken());
 		
-		Queue<Integer> queue = new ArrayDeque<Integer>();
-		
-		for (int i = 0; i < node+1; i++) {
-			grape[i] = new ArrayList<Integer>();
+		list = new ArrayList[N+1];
+		visited = new int[N+1];
+		queue = new ArrayDeque<Integer>();
+		for (int i = 0; i < N+1; i++) {
+			list[i] = new ArrayList<Integer>();
 		}
 		
-		for (int i = 0; i < link; i++) {
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			int l = Integer.parseInt(st.nextToken());
-			int r = Integer.parseInt(st.nextToken());
-			grape[l].add(r);
-			grape[r].add(l);
+			int left = Integer.parseInt(st.nextToken());
+			int right = Integer.parseInt(st.nextToken());
+			
+			list[left].add(right);
+			list[right].add(left);
 		}
 		
-		for (int i = 1; i < node+1; i++) {
-			Collections.sort(grape[i]);
+		for (List<Integer> list : list) {
+			Collections.sort(list);
 		}
 		
-		visited[start] = count++;
-		queue.offer(start);
-		bfs(grape, visited, start, queue);
+		bfs(S);
 		for (int i = 1; i < visited.length; i++) {
 			bw.write(visited[i]+"\n");
 		}
 		bw.flush();
-        bw.close();
-        br.close();
+		bw.close();
+		br.close();
 	}
 
-	private static void bfs(ArrayList[] grape, int[] visited, int start, Queue<Integer> queue) throws IOException {
-		while (!queue.isEmpty()) {
-			int cur = queue.poll();
-				Iterator<Integer> ir = grape[cur].iterator();
-				while (ir.hasNext()) {
-					int target =   ir.next();
-					if(visited[target] == 0) {
-						visited[target] = count++;
-						queue.offer(target);
-					}
-				}
-				
-		}
+	private static void bfs(int s) {
 		
+		queue.offer(s);
+		visited[s] = cnt++;
+		while (!queue.isEmpty()) {
+			
+			int n = queue.poll();
+			
+			Iterator<Integer> ir = list[n].iterator();
+			while (ir.hasNext()) {
+				Integer next = (Integer) ir.next();
+				if(visited[next] == 0) {
+					visited[next] = cnt++;
+					queue.offer(next);
+				}
+			}
+		}
 	}
-
 }
