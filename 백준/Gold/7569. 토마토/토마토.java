@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -15,6 +14,8 @@ public class Main {
 	static int[] dh = {0, 0, 0, 0, 1, -1}; 
 	static int[][][] visited;
 	static Queue<int[]> queue = new ArrayDeque<>();
+	static int zeroCnt;
+	static int max = Integer.MIN_VALUE;
 	static int C;
 	static int R;
 	static int H;
@@ -34,23 +35,14 @@ public class Main {
 				for (int j2 = 0; j2 < C; j2++) {
 					visited[i][j][j2] = Integer.parseInt(st.nextToken());
 					if(visited[i][j][j2] == 1) queue.offer(new int[] {i, j, j2});
+					if(visited[i][j][j2] == 0) zeroCnt++;
 				}
 			}
 		}
 		bfs();
-		int max = Integer.MIN_VALUE;
-		for (int i = 0; i < H; i++) {
-			for (int j = 0; j < R; j++) {
-				for (int j2 = 0; j2 < C; j2++) {
-					if(visited[i][j][j2] == 0) {
-						System.out.print(-1);
-						return;
-					}
-					max = Math.max(max, visited[i][j][j2]);
-				}
-			}
-		}
-		System.out.print(max-1);
+		if(zeroCnt != 0) System.out.println(-1);
+		else if(max == Integer.MIN_VALUE) System.out.println(0);
+		else System.out.println(max - 1);
 	}
 
 	private static void bfs() {
@@ -68,8 +60,10 @@ public class Main {
 				int nc = c + dc[i];
 				if(check(nh, nr, nc) && visited[nh][nr][nc] == 0) {
 					visited[nh][nr][nc] = visited[h][r][c] + 1;
+					max = Math.max(max, visited[nh][nr][nc]);
+					zeroCnt--;
 					queue.offer(new int[] {nh, nr, nc});
-				}		
+				}	
 			}
 		}
 	}
