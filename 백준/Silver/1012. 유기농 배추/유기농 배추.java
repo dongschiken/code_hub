@@ -3,61 +3,85 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Iterator;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static boolean grape[][];
-	static boolean visited[][];
-	static int[] dirR = { 1, -1, 0, 0 };
-	static int[] dirL = { 0, 0 ,1, -1 };
-	public static void main(String[] args) throws IOException {
+	static int[] dr = {1, -1, 0, 0};
+	static int[] dc = {0, 0, 1, -1};
+	static int[][] visited;
+	static int[][] map;
+	static int cnt;
+	static int N;
+	static int M;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		int T = Integer.parseInt(br.readLine());
 		
-		int testcase = Integer.parseInt(br.readLine());
-		
-		for (int i = 0; i < testcase; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int width = Integer.parseInt(st.nextToken());
-			int height = Integer.parseInt(st.nextToken());
-			int cabbage = Integer.parseInt(st.nextToken());
-			int maxFiled = 60;
+		for (int i = 0; i < T; i++) {
+			st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			int K = Integer.parseInt(st.nextToken());
 			
-			grape = new boolean[maxFiled][maxFiled];
-			visited = new boolean[maxFiled][maxFiled];
-			
-			
-			for (int j = 0; j < cabbage; j++) {
+			map = new int[N][M];
+			visited = new int[N][M];
+			cnt = 0;
+			for (int j = 0; j < K; j++) {
 				st = new StringTokenizer(br.readLine());
-				int l = Integer.parseInt(st.nextToken());
-				int r = Integer.parseInt(st.nextToken());
-				grape[l+1][r+1] = true;
+				int left = Integer.parseInt(st.nextToken());
+				int right = Integer.parseInt(st.nextToken());
+				
+				map[left][right] = 1;	
 			}
-			int answer = 0;
-			for (int j = 1; j < width+1; j++) {
-				for (int j2 = 1; j2 < height+1; j2++) {
-					if( grape[j][j2] && !visited[j][j2]) {
-						dfs(j, j2);
-						answer += 1;
+			
+			for (int j = 0; j < N; j++) {
+				for (int j2 = 0; j2 < M; j2++) {
+					if(visited[j][j2] == 0 && map[j][j2] == 1) {
+						bfs(j, j2);
+						cnt++;
 					}
 				}
 			}
-			System.out.println(answer);
+			bw.write(cnt+"\n");
 		}
-		
-		
-
+		bw.flush();
+		bw.close();
+		br.close();
 	}
-	private static void dfs(int y, int x) {
-		visited[y][x] = true;
-		for (int j2 = 0; j2 < 4; j2++) {
-			int newY = y + dirR[j2];
-			int newX = x + dirL[j2];
-			if( grape[newY][newX] && !visited[newY][newX]) {
-				dfs(newY, newX);
-			}
-		}
+
+	private static void bfs(int r, int c) {
+		Queue<int[]> queue = new ArrayDeque<>();
+		
+		queue.offer(new int[] {r, c});
+		
+		while (!queue.isEmpty()) {
+			
+			int[] cur = queue.poll();
+			r = cur[0];
+			c = cur[1];
+			
+			for (int i = 0; i < 4; i++) {
+				
+				int nr = r + dr[i];
+				int nc = c + dc[i];	
+				
+				if(check(nr, nc) && visited[nr][nc] == 0 && map[nr][nc] == 1) {
+					visited[nr][nc] = 1;
+					queue.offer(new int[] {nr, nc});
+				}
+			}	
+		}	
+	}
+	
+	private static boolean check(int nr, int nc) {
+		boolean check = false;
+		if(nr >= 0 && nr < N && nc >= 0 && nc < M) check = true;
+		return check;
 	}
 }
