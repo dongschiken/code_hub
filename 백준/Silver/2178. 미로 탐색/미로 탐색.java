@@ -1,68 +1,66 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	//
-	static int comp = Integer.MAX_VALUE;
-	static int[] dirx = new int[] {1, -1, 0, 0};
-	static int[] diry = new int[] {0, 0, 1, -1};
-	static int[][] dis = new int[102][102];
+	
+	static int[][] visited;
+	static int[][] map;
+	static Queue<int[]> queue;
+	static int[] dr = {1, -1, 0, 0};
+	static int[] dc = {0, 0, 1, -1};
+	static int N, M;
+	
+	
 	public static void main(String[] args) throws IOException {
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int node = 100;
-		int[][] grape = new int[node+2][node+2];
-		int[][] visited = new int[node+2][node+2];
-		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int arvlX = Integer.parseInt(st.nextToken());
-		int arvlY = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
 		
-		for (int i = 1; i <= arvlX; i++) {
-			String[] temp = br.readLine().split("");
-			for (int j = 1; j <= arvlY; j++) {
-				grape[i][j] = Integer.parseInt(temp[j-1]);
-			}
+		visited = new int[N][M];
+		map = new int[N][M];
+		queue = new ArrayDeque<>();
+		for (int i = 0; i < N; i++) {
+			map[i] = Arrays.stream(br.readLine().split("")).mapToInt(Integer::parseInt).toArray();
 		}
 		
-		bfs(1, 1, grape, visited, arvlX, arvlY);
-		System.out.println(dis[arvlX][arvlY]);
-		
-		
+		visited[0][0] = 1;
+		queue.offer(new int[] {0, 0});
+		bfs();
+		System.out.print(visited[N-1][M-1]);
 	}
 
-	private static void bfs(int x, int y, int[][] grape, 
-			int[][] visited, int arvlX, int arvlY) {
-		Queue<Integer> queue = new ArrayDeque<Integer>();
-		dis[x][y] = 1;
-		visited[x][y] = 1;
-		queue.offer(x);
-		queue.offer(y);
+
+	private static void bfs() {
+		
 		while (!queue.isEmpty()) {
-			x = queue.poll();
-			y = queue.poll();
-			if( x == arvlX && y == arvlY ) {
-				return;
-			}
+			
+			int[] cur = queue.poll();
+			
+			int r = cur[0];
+			int c = cur[1];
+			
 			for (int i = 0; i < 4; i++) {
-				int newX = x + dirx[i];
-				int newY = y + diry[i];
-				if(grape[newX][newY] == 1 && visited[newX][newY] != 1 ) {
-					visited[newX][newY] = 1;
-					queue.offer(newX);
-					queue.offer(newY);
-					dis[newX][newY] = dis[x][y] + 1;
+				
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				
+				if(check(nr, nc) && visited[nr][nc] == 0 && map[nr][nc] == 1) {
+					visited[nr][nc] = visited[r][c] + 1;
+					queue.offer(new int[] {nr, nc});
 				}
 			}
-			
 		}
-		
 	}
-
+	
+	private static boolean check(int nr, int nc) {
+		boolean check = false;
+		if(nr >= 0 && nr < N && nc >= 0 && nc < M) check = true;
+		return check;
+	}
 }
