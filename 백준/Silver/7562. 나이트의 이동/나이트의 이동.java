@@ -1,64 +1,68 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-public class Main{
+public class Main {
+	
+	static int[] dr = {-2, -2, 1, -1, 2, 2, 1, -1};
+	static int[] dc = {1, -1, 2, 2, 1, -1, -2, -2};
+	static int N;
+	static int[][] visited;
+	static Queue<int[]> queue = new ArrayDeque<>();
+	static int[] start;
+	static int[] target;
+	
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		StringTokenizer st;
+		int T = Integer.parseInt(br.readLine());
+		
+		for (int i = 0; i < T; i++) {
+			N = Integer.parseInt(br.readLine());
+			visited = new int[N][N];
+			st = new StringTokenizer(br.readLine());
+			start = new int[]{Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())};
+			st = new StringTokenizer(br.readLine());
+			target = new int[]{Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())};
+			
+			queue.offer(start);
+			visited[start[0]][start[1]] = 1;
+			bfs();
+			bw.write((visited[target[0]][target[1]]-1)+"\n");
+		}
+		bw.flush();
+		bw.close();
+		br.close();
+	}
 
-    static int[] dx = {1, -1, 2, 2, 1, -1, -2, -2};
-    static int[] dy = {-2, -2, -1, 1, 2, 2, -1, 1};
-
-    public static void main(String[] args) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int testcase = Integer.parseInt(br.readLine());
-
-        for (int i = 0; i < testcase; i++) {
-            int l = Integer.parseInt(br.readLine());
-            boolean[][] visited = new boolean[l][l];
-            int[][] value = new int[l][l];
-            for (int[] row : value) {
-                Arrays.fill(row, -1);
-            }
-
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int startX = Integer.parseInt(st.nextToken());
-            int startY = Integer.parseInt(st.nextToken());
-
-            st = new StringTokenizer(br.readLine());
-            int targetX = Integer.parseInt(st.nextToken());
-            int targetY = Integer.parseInt(st.nextToken());
-
-            int result = bfs(startX, startY, visited, value, targetX, targetY, l);
-            bw.write(result + "\n");
-        }
-        bw.flush();
-    }
-
-    private static int bfs(int startX, int startY, boolean[][] visited, int[][] value, int targetX, int targetY, int l) {
-        Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{startX, startY});
-        visited[startY][startX] = true;
-        value[startY][startX] = 0;
-
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int curX = current[0];
-            int curY = current[1];
-
-            if (curX == targetX && curY == targetY) {
-                return value[curY][curX];
-            }
-
-            for (int i = 0; i < 8; i++) {
-                int newX = curX + dx[i];
-                int newY = curY + dy[i];
-
-                if (newX >= 0 && newX < l && newY >= 0 && newY < l && !visited[newY][newX]) {
-                    queue.offer(new int[]{newX, newY});
-                    visited[newY][newX] = true;
-                    value[newY][newX] = value[curY][curX] + 1;
-                }
-            }
-        }
-        return -1;  // 도달할 수 없는 경우, 문제에서 명시하지 않았지만 기본적으로 이렇게 처리합니다.
-    }
+	private static void bfs() {
+        
+		while (!queue.isEmpty()) {
+			int[] cur = queue.poll();
+			int r = cur[0];
+			int c = cur[1];
+            
+			for (int i = 0; i < 8; i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+                
+				if(check(nr, nc) && visited[nr][nc] == 0) {
+					visited[nr][nc] = visited[r][c] + 1;
+					queue.offer(new int[] {nr, nc});
+				}
+			}
+		}
+	}
+	
+	private static boolean check(int nr, int nc) {
+		boolean check = false;
+		if(nr >= 0 && nr < N && nc >= 0 && nc < N) check = true;
+		return check;
+	}
 }
