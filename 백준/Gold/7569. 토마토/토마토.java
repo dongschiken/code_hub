@@ -1,110 +1,82 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int[] dx = {1, -1, 0, 0, 0, 0};
-	static int[] dy = {0, 0, 1, -1, 0, 0};
-	static int[] dz = {0, 0, 0, 0, 1, -1};
+	static int[] dr = {1, -1, 0, 0, 0, 0};
+	static int[] dc = {0, 0, 1, -1, 0, 0};
+	static int[] dh = {0, 0, 0, 0, 1, -1}; 
+	static int[][][] visited;
+	static Queue<int[]> queue = new ArrayDeque<>();
+	static int C;
+	static int R;
+	static int H;
 	
-	public static void main(String[] args) throws IOException, NumberFormatException {
+	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		Queue<Point> queue = new ArrayDeque<Point>();
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int[][][] grape;
-		int[][][] value;
-		int width = Integer.parseInt(st.nextToken());
-		int height = Integer.parseInt(st.nextToken());
-		int box = Integer.parseInt(st.nextToken());
-		grape = new int[box][height][width];
-		value = new int[box][height][width];
+		C = Integer.parseInt(st.nextToken());
+		R = Integer.parseInt(st.nextToken());
+		H = Integer.parseInt(st.nextToken());
 		
-		for (int i = 0; i < box; i++) {
-			for (int j = 0; j < height; j++) {
+		visited = new int[H][R][C];
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < R; j++) {
 				st = new StringTokenizer(br.readLine());
-				for (int j2 = 0; j2 < width; j2++) {
-					int temp = Integer.parseInt(st.nextToken());
-					if( temp == 1 ) {
-						queue.offer(new Point(j2, j, i));
-					}
-					grape[i][j][j2] = temp;
+				for (int j2 = 0; j2 < C; j2++) {
+					visited[i][j][j2] = Integer.parseInt(st.nextToken());
+					if(visited[i][j][j2] == 1) queue.offer(new int[] {i, j, j2});
 				}
 			}
 		}
-		
-		int result = bfs(grape, value, queue, width, height, box);
-		
-		System.out.println(result);
+		bfs();
+		int max = Integer.MIN_VALUE;
+		for (int i = 0; i < H; i++) {
+			for (int j = 0; j < R; j++) {
+				for (int j2 = 0; j2 < C; j2++) {
+					if(visited[i][j][j2] == 0) {
+						System.out.print(-1);
+						return;
+					}
+					max = Math.max(max, visited[i][j][j2]);
+				}
+			}
+		}
+		System.out.print(max-1);
 	}
 
-	private static int bfs(int[][][] grape, int[][][] value, Queue<Point> queue, int width, int height, int box) {
-		int maxDay = 0;
-		
+	private static void bfs() {
 		while (!queue.isEmpty()) {
-			Point point = queue.poll();
-			int curX = point.getX();
-			int curY = point.getY();
-			int curZ = point.getZ();
 			
-				for (int j = 0; j < 6; j++) {
-					int newX = curX + dx[j];
-					int newY = curY + dy[j];
-					int newZ = curZ + dz[j];
-					
-					if( newX >= 0 && newX < width && newY >= 0 && newY < height && newZ >= 0 && newZ < box && grape[newZ][newY][newX] != 1 && grape[newZ][newY][newX] != -1 ) {
-						grape[newZ][newY][newX] = 1;
-						value[newZ][newY][newX] = value[curZ][curY][curX] + 1;						
-						queue.offer(new Point(newX, newY, newZ));
-						maxDay = Math.max(maxDay, value[newZ][newY][newX]);
-					}
-				}
-		}
-		for (int i = 0; i < box; i++) {
-			for (int j = 0; j < height; j++) {
-				for (int j2 = 0; j2 < width; j2++) {
-					if( grape[i][j][j2] == 0) {
-						return -1;
-					}
-				}
+			int cur[] = queue.poll();
+			int h = cur[0];
+			int r = cur[1];
+			int c = cur[2];
+			
+			for (int i = 0; i < 6; i++) {
+				
+				int nh = h + dh[i];
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				if(check(nh, nr, nc) && visited[nh][nr][nc] == 0) {
+					visited[nh][nr][nc] = visited[h][r][c] + 1;
+					queue.offer(new int[] {nh, nr, nc});
+				}		
 			}
 		}
-		return maxDay;
-	}
-}
-class Point{
-	int x;
-	int y;
-	int z;
-	
-	public Point() {
-		super();
 	}
 	
-	public Point(int x, int y, int z) {
-		super();
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	private static boolean check(int nh, int nr, int nc) {
+		boolean check = false;
+		if(nr >= 0 && nr < R && nc >= 0 && nc < C && nh >= 0 && nh < H) check = true;
+		return check;
 	}
-	public int getX() {
-		return x;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public int getY() {
-		return y;
-	}
-	public void setY(int y) {
-		this.y = y;
-	}
-	public int getZ() {
-		return z;
-	}
-	public void setZ(int z) {
-		this.z = z;
-	}
-	
-	
 }
