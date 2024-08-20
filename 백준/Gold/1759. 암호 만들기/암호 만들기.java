@@ -34,8 +34,11 @@ public class Main {
 		dfs(0, 0);
 		Collections.sort(list);
 		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i));
+			bw.write(list.get(i)+"\n");
 		}
+        bw.flush();
+        bw.close();
+        br.close();
 	}
 	static List<Character> temp = new ArrayList<>();
 	private static void dfs(int loop, int stage) {
