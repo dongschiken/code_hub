@@ -67,9 +67,7 @@ public class Main {
 				int nc = c + dc[i];
 
 				if(check(nr, nc) && visited[nr][nc] == 0 && grape[nr][nc] == 1) {
-					visited[nr][nc] = visited[r][c];
-					//					System.out.println(nr+", "+nc);
-					result = Math.max(result, visited[nr][nc]);
+					result = Math.max(result, visited[r][c]);
 					return;
 				}
 				if(check(nr, nc) && visited[nr][nc] == 0) {
