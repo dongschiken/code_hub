@@ -9,14 +9,11 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int[] dr = {1, -1, 0, 0};
-	static int[] dc = {0, 0, -1, 1};
 	static List<int[]> list = new ArrayList<>();
 	static List<int[]> temp = new ArrayList<>();
-	static int[][] visited;
 	static int[][] map;
-	static int min = Integer.MAX_VALUE;
 	static int result;
+    static int min = Integer.MAX_VALUE;
 	static int N, M;
 	
 	public static void main(String[] args) throws IOException {
@@ -64,6 +61,7 @@ public class Main {
 		}
 		int sum = 0;
 		int result = 0;
+        // 전체 집(1)을 돌면서 현재 3(남겨진 치킨집)의 좌표값과 절대값 계산해서 작은값으로 초기화
 		for (int i = 0; i < temp.size(); i++) {
 			int min = Integer.MAX_VALUE;
 			for (int j = 0; j < chickens.size(); j++) {
