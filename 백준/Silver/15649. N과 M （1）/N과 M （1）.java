@@ -1,56 +1,46 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-
-	static int[] num_check;
-	static boolean[] visit_check;
+	
+	static int N;
+	static int M;
+	static int[] arr;
+	static boolean[] visited;
 	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	public static void main(String[] args) throws Exception {
+		Scanner sc = new Scanner(System.in);
 		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		
-		num_check = new int[M];
-		visit_check = new boolean[N];
-		
-		
-		recursion(N, M, 0);
-		
-		bw.flush();
-		bw.close();
-		br.close();
-		
-
+		N = sc.nextInt();
+		M = sc.nextInt();
+		arr = new int[M];
+		visited = new boolean[N];
+		dfs(0, 0);
+        bw.flush();
+        bw.close();
 	}
-	private static void recursion(int N, int M, int index) throws IOException {
-		if( index == M ) {
-			for (int i = 0; i < num_check.length; i++) {
-				bw.write(num_check[i]+1+" ");
+
+	private static void dfs(int loop, int stage) throws Exception {
+		
+		if(stage == M) {
+			for (int i = 0; i < M; i++) {
+				bw.write((arr[i] + 1) + " ");
 			}
 			bw.write("\n");
 			return;
 		}
-		
-		for (int i = 0; i < N; i++) {
-			// 방문 안했으면
-			if( visit_check[i] == false ) {
-				visit_check[i] = true;
-				num_check[index] = i;
-                // 자식 노드들을 방문하기 위해 재귀호출
-				recursion(N, M, index+1);
-                // 자식 노드들 다 방문하고 오면 부모노드의 방문하지 않은 상태로 변경
-				visit_check[i] = false;
+ 		
+		for (int j2 = 0; j2 < N; j2++) {
+			if(!visited[j2]) {
+				visited[j2] = true;
+				arr[stage] = j2;
+				dfs(j2 + 1, stage + 1);
+				visited[j2] = false;
 			}
 		}
+		
 	}
-
 }
