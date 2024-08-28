@@ -3,11 +3,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
-	
 	static int[] arr = new int[1000000];
 	static int[] temp = new int[1000000];
 	
@@ -18,49 +16,39 @@ public class Solution {
 		for (int i = 0; i < 1000000; i++) {
 			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		mergeSort(0, arr.length - 1);
-		System.out.println(arr[500000]);
 		
+		quickSort(0, arr.length - 1);
+		System.out.println(arr[500000]);
 	}
 
-	private static void mergeSort(int left, int right) {
+	private static void quickSort(int left, int right) {
 		
 		if(left < right) {
-			
-			int mid = (left + right) >>> 1;
-			mergeSort(left, mid);
-			mergeSort(mid + 1, right);
-			merge(left, mid, right);
+			int pivot = partition(left, right);
+			quickSort(left, pivot - 1);
+			quickSort(pivot + 1, right);
 		}
 	}
 
-	private static void merge(int left, int mid, int right) {
+	private static int partition(int left, int right) {
+		int pivot = arr[left];
+		int l = left + 1;
+		int r = right;
 		
-		int l = left;
-		int r = mid + 1;
-		int idx = left;
-		
-		while (l <= mid && r <= right) {
-			if(arr[l] <= arr[r]) {
-				temp[idx++] = arr[l++];
-			}else {
-				temp[idx++] = arr[r++];
+		while (l <= r) {
+			while (l <= r && pivot >= arr[l]) l++;
+			while (pivot < arr[r]) r--;
+			
+			if(l < r) {
+				int tmp = arr[r];
+				arr[r] = arr[l];
+				arr[l] = tmp;
 			}
 		}
 		
-		if(l > mid) {
-			while (r <= right) {
-				temp[idx++] = arr[r++];
-			}
-		}else {
-			while (l <= mid) {
-				temp[idx++] = arr[l++];
-			}
-		}
-		
-		for (int i = left; i <= right; i++) {
-			arr[i] = temp[i];
-		}
-		
+		int tmp = arr[left];
+		arr[left] = arr[r];
+		arr[r] = tmp;
+		return r;
 	}
 }
