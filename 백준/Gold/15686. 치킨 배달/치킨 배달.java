@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int N, M;
-	static int result = Integer.MAX_VALUE;
-	static int sum;
-	static int[][] map;
 	static List<int[]> list = new ArrayList<>();
-	static List<int[]> house = new ArrayList<>();
-	static List<int[]> tempList = new ArrayList<>();
+	static List<int[]> temp = new ArrayList<>();
+	static int[][] map;
+	static int result;
+	static int min = Integer.MAX_VALUE;
+	static int N, M;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,39 +28,47 @@ public class Main {
 			for (int j = 0; j < N; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
 				if(map[i][j] == 2) list.add(new int[] {i, j});
-				if(map[i][j] == 1) house.add(new int[] {i, j});
+				if(map[i][j] == 1) temp.add(new int[] {i, j});
 			}
 		}
 		dfs(0, 0);
-		System.out.println(result);
+		System.out.println(min);
 	}
-
-	private static void dfs(int stage, int idx) {
+	
+	static List<int[]> chickens = new ArrayList<>();
+	private static void dfs(int loop, int stage) {
 		if(stage == M) {
 			distance();
 			return;
 		}
 		
-		for (int j = idx; j < list.size(); j++) {
-			tempList.add(new int[] {list.get(j)[0], list.get(j)[1]});
-			dfs(stage + 1, j + 1);
-			tempList.remove(tempList.size() - 1);
+		for (int i = loop; i < list.size(); i++) {
+			int r = list.get(i)[0];
+			int c = list.get(i)[1];
+			map[r][c] = 3;
+			chickens.add(new int[] {r, c});
+			dfs(i + 1, stage + 1);
+			map[r][c] = 2;
+			chickens.remove(chickens.size() - 1);
 		}
-		
 	}
 
 	private static void distance() {
-		sum = 0;
-		for (int i = 0; i < house.size(); i++) {
-			int[] h = house.get(i);
+		// 좌표값으로 거리 구하기
+		// Math.abs(r1 - r2) + Math.abs(c1 - c2)
+		int sum = 0;
+		int result = 0;
+        // 전체 집(1)을 돌면서 현재 3(남겨진 치킨집)의 좌표값과 절대값 계산해서 작은값으로 초기화
+		for (int i = 0; i < temp.size(); i++) {
 			int min = Integer.MAX_VALUE;
-			for (int j = 0; j < tempList.size(); j++) {
-				int r = tempList.get(j)[0];
-				int c = tempList.get(j)[1];
-				min = Math.min(min, Math.abs(h[0] - r) + Math.abs(h[1] - c));
+			for (int j = 0; j < chickens.size(); j++) {
+				int[] chicken = chickens.get(j);
+				sum = (Math.abs(chicken[0] - temp.get(i)[0]) + Math.abs(chicken[1] - temp.get(i)[1]));
+				min = Math.min(min, sum);
 			}
-			sum += min;
+			result += min;
 		}
-		result = Math.min(sum, result);
+		min = Math.min(min, result);
 	}
 }
+
