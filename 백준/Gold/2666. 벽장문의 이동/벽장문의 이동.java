@@ -38,10 +38,9 @@ public class Main {
 	// 최종적으로 min값만 구하면 된다.
 	private static void dfs(int left, int right, int stage, int value) {
 //		System.out.println("left + stage + list : " + left + ", " + stage + ", " + list.get(stage));
-		if(stage == M - 1) {
+		if(stage == M) {
 			// stage가 3이되었을때 왼쪽과 오른쪽의 현재까지의 값을 result와 비교해서 더 작은값으로 초기화
-			result = Math.min(result, value + Math.abs(list.get(stage) - left));
-			result = Math.min(result, value + Math.abs(list.get(stage) - right));
+			result = Math.min(result, value);
 			return;
 		}
 		// 왼쪽에 있는 문을 사용하는 경우
