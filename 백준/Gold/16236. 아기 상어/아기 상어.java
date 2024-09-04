@@ -1,186 +1,98 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.PriorityQueue;
+import java.util.Scanner;
 
 public class Main {
 
 	static int[] dr = { 1, -1, 0, 0 };
 	static int[] dc = { 0, 0, 1, -1 };
-	static Queue<int[]> queue;
-	static List<int[]> list;
-	static int[][] visited;
 	static int[][] map;
+	static boolean[][] visited;
 	static int N;
-	static int sharkSize = 2;
-	static int cnt = 0;
-	static int[] sharkDirection;
-	static int time;
+	static int time, cnt, sharkSize = 2;
+
+	static class Shark {
+		int r, c, d;
+
+		public Shark(int r, int c, int d) {
+			super();
+			this.r = r;
+			this.c = c;
+			this.d = d;
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
-		N = Integer.parseInt(br.readLine());
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
 		map = new int[N][N];
+		int r = 0;
+		int c = 0;
 		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
+				map[i][j] = sc.nextInt();
 				if (map[i][j] == 9) {
-					sharkDirection = new int[] { i, j };
-					map[i][j] = 0;
+					r = i;
+					c = j;
 				}
 			}
 		}
-
-		do {
-			list = new ArrayList<>();
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (map[i][j] > 0 && map[i][j] < sharkSize) {
-						list.add(new int[] { i, j });
-					}
-				}
-			}
-			search(list);
-			if(time == 0) break;
-		} while (!list.isEmpty() && min != Integer.MAX_VALUE);
-		System.out.println(time);
-	}
-	
-	static int min;
-	private static void search(List<int[]> list2) {
-		List<int[]> tempList = new ArrayList<>();
-		min = Integer.MAX_VALUE;
-		for (int i = 0; i < list.size(); i++) {
-			int[] tmp = distanceSearch(list.get(i)[0], list.get(i)[1]);
-			min = Math.min(tmp[2], min);
-			tempList.add(tmp);
-		}
-
-		if(min == Integer.MAX_VALUE) return;
-		for (int i = 0; i < tempList.size(); i++) {
-			if(min == tempList.get(i)[2]) {
-//				System.out.println(tempList.get(i)[0] +", " + tempList.get(i)[1]);
-				bfs(tempList.get(i)[0], tempList.get(i)[1]);
+		// 아기상어의 위치를 받아서 그 위치값을 수정하면서 크기 키우기, 물고기 먹기
+		while (true) {
+			Shark s = bfs(r, c);
+			// 먹이를 못먹으면 끝
+			if (s == null)
 				break;
-			}
-		}
-	}
-
-	//	private static boolean minValueSearch(int value, int i, int j) {
-	//		boolean check = false;
-	//		queue = new ArrayDeque<>();
-	//		visited = new int[N][N];
-	//		visited[sharkDirection[0]][sharkDirection[1]] = 1;
-	//		queue.offer(sharkDirection);
-	//
-	//		while (!queue.isEmpty()) {
-	//			int[] cur = queue.poll();
-	//			int r = cur[0];
-	//			int c = cur[1];
-	//
-	//			for (int k = 0; k < 4; k++) {
-	//				int nr = r + dr[k];
-	//				int nc = c + dc[k];
-	//				if (check(nr, nc) && visited[nr][nc] == 0 && map[nr][nc] <= sharkSize) {
-	//					visited[nr][nc] = visited[r][c] + 1;
-	//					queue.offer(new int[] { nr, nc });
-	//				}
-	//			}
-	//		}
-	//		if(value == visited[i][j] - 1) {
-	//			bfs(i, j);
-	//			check = true;
-	//		}
-	//		return check;
-	//	}
-
-	private static int[] distanceSearch(int i, int j) {
-		int min = Integer.MAX_VALUE;
-		queue = new ArrayDeque<>();
-		visited = new int[N][N];
-		visited[sharkDirection[0]][sharkDirection[1]] = 1;
-		queue.offer(sharkDirection);
-
-		while (!queue.isEmpty()) {
-			int[] cur = queue.poll();
-			int r = cur[0];
-			int c = cur[1];
-
-			for (int k = 0; k < 4; k++) {
-				int nr = r + dr[k];
-				int nc = c + dc[k];
-				if (check(nr, nc) && visited[nr][nc] == 0 && map[nr][nc] <= sharkSize) {
-					visited[nr][nc] = visited[r][c] + 1;
-					queue.offer(new int[] { nr, nc });
-				}
-			}
-		}
-		if(visited[i][j] != 0)
-			return new int[] {i, j, Math.min(visited[i][j] - 1, min)};
-
-		return new int[] {i, j, min};
-	}
-
-	private static void bfs(int i, int j) {
-		queue = new ArrayDeque<>();
-		visited = new int[N][N];
-		// i, j 위치가 타겟
-		// 그 위치까지 갈 수 있으면 찍는다.
-		// 현재 상어의 위치값
-		// 만약 상어가 타겟위치로 이동 못했으면 현재 위치값이 다시 상어한테 들어가고
-		// 만약 상어가 타겟위치로 이동했으면 그 위치값이 상어한테 들어간다.
-		// 시간초는 누적
-		visited[sharkDirection[0]][sharkDirection[1]] = 1;
-		queue.offer(sharkDirection);
-
-		while (!queue.isEmpty()) {
-			int[] cur = queue.poll();
-			int r = cur[0];
-			int c = cur[1];
-
-			for (int k = 0; k < 4; k++) {
-				int nr = r + dr[k];
-				int nc = c + dc[k];
-				if (check(nr, nc) && visited[nr][nc] == 0 && map[nr][nc] <= sharkSize) {
-					visited[nr][nc] = visited[r][c] + 1;
-					queue.offer(new int[] { nr, nc });
-				}
-			}
-		}
-		if (visited[i][j] != 0) {
-			// 타겟 위치로 이동할 수 있으면 상어의 위치 조정
-			sharkDirection = new int[] { i, j };
-			time += visited[i][j] - 1;
-			map[i][j] = 0;
+			r = s.r;
+			c = s.c;
+			time += s.d;
 			cnt++;
-			// 상어 사이즈 1 증가
 			if (cnt == sharkSize) {
 				sharkSize++;
 				cnt = 0;
 			}
 		}
+		System.out.println(time);
+		sc.close();
 	}
 
-	static boolean check(int nr, int nc) {
-		boolean check = false;
+	private static Shark bfs(int r, int c) {
+		// 거리를 기준으로 거리가 다르면 거리가 더 작은값, 같다면 행을 기준으로 행이 위쪽일 경우(값이 작다)
+		// 마지막으로 열이 더 왼쪽(값이 작다)
+		PriorityQueue<Shark> pq = new PriorityQueue<>((o1, o2)
+				-> o1.d != o2.d ? o1.d - o2.d : o1.r != o2.r ? o1.r - o2.r : o1.c - o2.c);
+		map[r][c] = 0;
+		pq.offer(new Shark(r, c, 0));
+		visited = new boolean[N][N];
+		visited[r][c] = true;
+		while (!pq.isEmpty()) {
+
+			Shark cur = pq.poll();
+			r = cur.r;
+			c = cur.c;
+			int d = cur.d;
+
+			// 먹이를 먹었으면 현재 상어의 위치를 반환
+			if (0 < map[r][c] && map[r][c] < sharkSize) {
+				return new Shark(r, c, d);
+			}
+
+			for (int i = 0; i < 4; i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				
+				if (check(nr, nc) && !visited[nr][nc] && map[nr][nc] <= sharkSize) {
+					visited[nr][nc] = true;
+					pq.offer(new Shark(nr, nc, d + 1));
+				}
+			}
+		}
+		return null;
+	}
+
+	private static boolean check(int nr, int nc) {
 		if (nr >= 0 && nr < N && nc >= 0 && nc < N)
-			check = true;
-		return check;
+			return true;
+		return false;
 	}
 }
-/*
- * 
-3
-1 0 0
-6 6 6
-6 9 6
- */
