@@ -110,7 +110,6 @@ public class Main {
 		// 부분집합 -> 10개의 선거구 -> 1024개
 		// 만약 부분집합에서 0, 123456 이나오면 if문으로 처리
 		// 부분집합 한개 구해서 그 부분집합에 있는 숫자를 제외한 나머지 가져오기
-
 		dfs(0);
 		if(min == Integer.MAX_VALUE) System.out.println(-1);
 		else System.out.println(min);
@@ -129,9 +128,9 @@ public class Main {
 			int cntOne = 0;
 			int cntTwo = 0;
 			for (int i = 1; i <= N; i++) {
-				if (sel[i]) /* && list[i].size() != 0) */
+				if (sel[i])
 					list1.add(data[i]);
-				else /* if(list[i].size() != 0) */
+				else
 					list2.add(data[i]);
 			}
 			if (list1.size() == 0 || list1.size() == N || list2.size() == 0 || list1.size() == N)
@@ -153,8 +152,6 @@ public class Main {
 		// 156 bfs
 		// 이렇게 했는데 visited가 남아있다. -> 안되는 로직이다.
 		// 이렇게 했는데 visited가 안남아있다. -> 되는 로직이다.
-//		System.out.println(list1);
-//		System.out.println(list2);
 		boolean check = true;
 		visitedOne = new int[N + 1];
 		for (int i = 0; i < list1.size(); i++) {
@@ -185,7 +182,6 @@ public class Main {
 			sum2 += values[list2.get(i)];
 		}
 		min = Math.min(min, Math.abs(sum1 - sum2));
-//		System.out.println(min);
 	}
 
 	private static boolean bfs(List<Integer> list1, int[] visited) {
@@ -204,54 +200,10 @@ public class Main {
 			}
 		}
 		boolean check = true;
-//		System.out.println(Arrays.toString(visited));
 		for (int i = 1; i < visited.length; i++) {
 			if (visited[i] == 0 /* && list[i].size() != 0 */)
 				check = false;
 		}
-//		System.out.println(check);
 		return check;
 	}
 }
-
-// 반례 1
-//6
-//1 1 1 1 1 1
-//1 2
-//1 1
-//0
-//1 5
-//1 4
-//0
-
-// 반례 2
-//6
-//1 1 1 1 1 1
-//4 2 3 4 5
-//1 1
-//1 1
-//1 1
-//1 1
-//0
-
-//3
-//3 4 3
-//0
-//0
-//0
-
-//2
-//3 4
-//0
-//0
-
-//6
-//1 2 3 5 6 7
-//0
-//0
-//1 5
-//1 5
-//2 3 4
-//0
-
-// 답 -1
