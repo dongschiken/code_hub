@@ -53,15 +53,15 @@ public class Main {
 			int nx3 = x * 2;
 			if(nx1 >= 0 && nx1 < INF && !visited[nx1]) {
 				q.offer(new int[] {nx1, v + 1});
-				if(nx1 == M) visited[nx1] = false;	
+				//if(nx1 == M) visited[nx1] = false;	
 			}
 			if(nx2 >= 0 && nx2 < INF && !visited[nx2]) {
 				q.offer(new int[] {nx2, v + 1});
-				if(nx2 == M) visited[nx2] = false;
+				//if(nx2 == M) visited[nx2] = false;
 			}
 			if(nx3 >= 0 && nx3 < INF && !visited[nx3]) {
 				q.offer(new int[] {nx3, v + 1});
-				if(nx3 == M) visited[nx3] = false;	
+				//if(nx3 == M) visited[nx3] = false;	
 			}
 		}
 	}
