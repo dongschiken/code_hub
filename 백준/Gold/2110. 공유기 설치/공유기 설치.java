@@ -32,7 +32,7 @@ public class Main {
 			int cnt = 1;
 			long cur = arr[0];
 			for (int i = 1; i < N; i++) {
-				if(arr[i] > cur + mid) {
+				if(arr[i] >= cur + mid) {
 					cnt++;
 					cur = arr[i];
 				}
@@ -43,7 +43,7 @@ public class Main {
 				start = mid + 1;
 			}
 		}
-		System.out.println(start);
+		System.out.println(start - 1);
 		
 	}
 }
