@@ -1,0 +1,58 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int[] arr = new int[M + 1];
+//		long startTime = System.nanoTime();
+		for (int i = 1; i <= M; i++) {
+			arr[i] = i;
+		}
+		
+		for (int i = 2; i <= Math.sqrt(M); i++) {
+			for (int j = i + i; j <= M; j += i) {
+				if(arr[i] == 0) break;
+				if(j % i == 0) arr[j] = 0;
+			}
+		}
+		
+		for (int i = N; i <= M; i++) {
+			if(arr[i] == 0) continue;
+			boolean check = isPalindrome(i);
+			if(check) sb.append(i).append("\n"); 
+		}
+		sb.append(-1);
+		System.out.println(sb);
+		
+//		long endTime = System.nanoTime();
+//		long timeElapsed = endTime - startTime;       
+//		System.out.println("nano seconds :" +  timeElapsed);      
+//		System.out.println("milli seconds: " + timeElapsed / 1000000);       
+//		System.out.println("seconds : " + (double)timeElapsed / 1_000_000_000);
+	}
+	
+	// 팰린드롬 판별
+	static public boolean isPalindrome(int val) {
+		int n = val;
+		int rev = 0;
+		while (n > 0) {
+			// n에서 1의 자릿수(나머지연산)를 가져온다
+			int r = n % 10;
+			
+			// n에서 하나 떼온 숫자를 가져와서 rev의 뒤에 붙인다.
+			rev = rev * 10 + r;
+			
+			// n의 1의자릿수를 제거
+			n = n / 10;
+		}
+		return (val == rev);
+	}
+}
