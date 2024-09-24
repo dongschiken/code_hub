@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-//		long startTime = System.nanoTime();
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -33,12 +32,6 @@ public class Main {
 		
 		sb.append(-1);
 		System.out.println(sb);
-		
-//		long endTime = System.nanoTime();
-//		long timeElapsed = endTime - startTime;       
-//		System.out.println("nano seconds :" +  timeElapsed);
-//		System.out.println("milli seconds: " + timeElapsed / 1000000);
-//		System.out.println("seconds : " + (double)timeElapsed / 1_000_000_000);	
 	}
 	
 	// 팰린드롬 판별
@@ -47,10 +40,8 @@ public class Main {
 		int rev = 0;
 		while (n > 0) {
 			// n에서 1의 자릿수(나머지연산)를 가져온다
-			int r = n % 10;
-			
 			// n에서 하나 떼온 숫자를 가져와서 rev의 뒤에 붙인다.
-			rev = rev * 10 + r;
+			rev = rev * 10 + n % 10;
 			
 			// n의 1의자릿수를 제거
 			n = n / 10;
