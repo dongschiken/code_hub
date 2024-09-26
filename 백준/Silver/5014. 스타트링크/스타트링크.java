@@ -49,8 +49,8 @@ public class Main {
 			Node curr = q.poll();
 			int c = curr.v;
 			int cnt = curr.cnt;
-			if(visited[c]) continue;
-			visited[c] = true;
+			// 중복해서 q에 같은 지점을 넣는것을 방지 ( 메모리 초과 )
+			
 			
 			if(c == G) {
 				return cnt;
@@ -60,9 +60,11 @@ public class Main {
 			
 			if(u <= F && !visited[u]) {
 				q.offer(new Node(u, cnt + 1));
+				visited[u] = true;
 			}
 			if(d > 0 && !visited[d]) {
 				q.offer(new Node(d, cnt + 1));
+				visited[d] = true;
 			}
 		}
 		return -1;
