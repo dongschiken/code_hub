@@ -6,16 +6,14 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Queue;
-import java.util.StringTokenizer;
 
 public class Solution {
 	
 	static int[] dr = {1, -1, 0, 0};
 	static int[] dc = {0, 0, 1, -1};
 	static boolean[][] visited;
-	static Queue<Node> q;
 	static int[][] map;
-	static Node e, s;
+	static Queue<Node> q;
 	static class Node {
 		int r, c;
 
@@ -28,6 +26,11 @@ public class Solution {
 		public Node() {
 			super();
 		}
+
+		@Override
+		public String toString() {
+			return "Node [r=" + r + ", c=" + c + "]";
+		}
 		
 	}
 	
@@ -35,51 +38,57 @@ public class Solution {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-		int T = 10;
-		for (int i = 1; i <= T; i++) {
+		for (int i = 1; i <= 10; i++) {
 			br.readLine();
 			map = new int[16][16];
 			visited = new boolean[16][16];
 			q = new ArrayDeque<>();
-			for (int j = 0; j < map.length; j++) {
+			Node s = new Node();
+			Node e = new Node();
+			for (int r = 0; r < 16; r++) {
 				String[] str = br.readLine().split("");
-				for (int j2 = 0; j2 < map[j].length; j2++) {
-					map[j][j2] = Integer.parseInt(str[j2]);
-					if(map[j][j2] == 2) s = new Node(j, j2);
-					if(map[j][j2] == 3) e = new Node(j, j2);
+				for (int c = 0; c < 16; c++) {
+					map[r][c] = Integer.parseInt(str[c]);
+					if(map[r][c] == 2) {
+						s.r = r; s.c = c;
+					}
+					if(map[r][c] == 3) {
+						e.r = r; e.c = c;
+					}
 				}
 			}
-			bfs();
-			if(visited[e.r][e.c]) bw.write("#"+i+" "+1+"\n");
-			else bw.write("#"+i+" "+0+"\n");
+			bfs(s);
+			int result = 0;
+			result = visited[e.r][e.c] ? 1 : 0;
+			bw.write("#"+i+" "+result+"\n");
 		}
 		bw.flush();
 		bw.close();
 		br.close();
 	}
 
-	private static void bfs() {
+	private static void bfs(Node s) {
 		visited[s.r][s.c] = true;
 		q.offer(new Node(s.r, s.c));
 		while (!q.isEmpty()) {
 			Node n = q.poll();
 			int r = n.r;
 			int c = n.c;
-			
 			for (int i = 0; i < 4; i++) {
 				int nr = r + dr[i];
 				int nc = c + dc[i];
+				
 				if(check(nr, nc)) continue;
 				if(!visited[nr][nc] && (map[nr][nc] == 0 || map[nr][nc] == 3)) {
-					q.offer(new Node(nr, nc));
 					visited[nr][nc] = true;
+					q.offer(new Node(nr, nc));
 				}
 			}
 		}
+		
 	}
 
 	private static boolean check(int nr, int nc) {
-		return (nr < 0 || nr >= 16 || nc < 0 || nc >= 16);
+		return nr < 0 || nr >= 16 || nc < 0 || nc >= 16;
 	}
-
 }
