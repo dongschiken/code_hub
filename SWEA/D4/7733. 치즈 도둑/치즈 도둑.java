@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -12,10 +11,10 @@ public class Solution {
 	
 	static int[] dr = {1, -1, 0, 0};
 	static int[] dc = {0, 0, 1, -1};
+	static int[][] map;
 	static boolean[][] visited;
 	static Queue<Node> q;
-	static int[][] map;
-	static int N;
+	static int N, cnt, result;
 	static class Node {
 		int r, c;
 
@@ -26,7 +25,6 @@ public class Solution {
 		}
 
 		public Node() {
-			super();
 		}
 
 		@Override
@@ -41,39 +39,40 @@ public class Solution {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		StringTokenizer st;
 		int T = Integer.parseInt(br.readLine());
-		
 		for (int i = 1; i <= T; i++) {
 			N = Integer.parseInt(br.readLine());
 			map = new int[N][N];
-
-			int max = Integer.MIN_VALUE;
+			int max = 0;
+			result = -1;
 			for (int j = 0; j < N; j++) {
 				st = new StringTokenizer(br.readLine());
 				for (int j2 = 0; j2 < N; j2++) {
 					map[j][j2] = Integer.parseInt(st.nextToken());
-					max = Math.max(map[j][j2], max);
+					max = Math.max(max, map[j][j2]);
 				}
 			}
-			int maxValue = -1;
+			
 			for (int j = 0; j <= max; j++) {
+				cnt = 0;
 				visited = new boolean[N][N];
-				int cnt = 0;
-				for (int j2 = 0; j2 < N; j2++) {
-					for (int k = 0; k < N; k++) {
-						if(!visited[j2][k] && map[j2][k] > j) {
-							bfs(j2, k, j);
+				for (int r = 0; r < N; r++) {
+					for (int c = 0; c < N; c++) {
+						if(!visited[r][c] && map[r][c] > j) {
+							dfs(r, c, j);
 							cnt++;
 						}
 					}
 				}
-				maxValue = Math.max(cnt, maxValue);
+				result = Math.max(cnt, result);
 			}
-			bw.write("#"+i+" "+maxValue+"\n");
+			bw.write("#"+i+" "+result+"\n");
 		}
 		bw.flush();
+		bw.close();
+		br.close();
 	}
 
-	private static void bfs(int r, int c, int day) {
+	private static void dfs(int r, int c, int val) {
 		q = new ArrayDeque<>();
 		visited[r][c] = true;
 		q.offer(new Node(r, c));
@@ -86,8 +85,8 @@ public class Solution {
 				int nr = r + dr[i];
 				int nc = c + dc[i];
 				
-				if(check(nr, nc)) continue;
-				if(!visited[nr][nc] && map[nr][nc] > day) {
+				if(check(nr, nc)) continue; 
+				if(!visited[nr][nc] && map[nr][nc] > val) {
 					q.offer(new Node(nr, nc));
 					visited[nr][nc] = true;
 				}
@@ -99,6 +98,4 @@ public class Solution {
 	private static boolean check(int nr, int nc) {
 		return nr < 0 || nr >= N || nc < 0 || nc >= N;
 	}
-	
-
 }
