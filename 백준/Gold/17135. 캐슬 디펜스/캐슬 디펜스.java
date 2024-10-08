@@ -89,7 +89,6 @@ public class Main {
 			
 			// 궁수 1명에 해당하는 공격할 수 있는 적 뽑기
 			for (int j = 0; j < aList.size(); j++) {
-				simulMap = new int[N][M];
 				int r = aList.get(j).r;
 				int c = aList.get(j).c;
 				
