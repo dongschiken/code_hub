@@ -66,7 +66,7 @@ public class Main {
         }else if(num == 3) {
             doRoll(num, d);
             if(tables[num][RIGHT] != tables[num+1][LEFT]) {
-                doRoll(num-1, d * -1);
+                doRoll(num+1, d * -1);
             }
             for(int i = 3; i > 1; i--) {
                 if(tables[i][LEFT] != tables[i-1][RIGHT]) {
