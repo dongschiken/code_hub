@@ -85,7 +85,7 @@ public class Main {
         int md = (d + 2) % 4;
         int nr = r + dr[md];
         int nc = c + dc[md];
-        if(nr < 0 || nr >= N || nc < 0 || nc >= N || map[nr][nc] == 1) return false;
+        if(nr < 0 || nr >= N || nc < 0 || nc >= M || map[nr][nc] == 1) return false;
         // System.out.println("들어오나??");
         q.offer(new Node(nr, nc, d));
         return true;
