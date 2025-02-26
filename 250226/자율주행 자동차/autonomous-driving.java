@@ -56,6 +56,7 @@ public class Main {
                 if(visited[i][j]) sum++;
             }
         }
+        // System.out.println(Arrays.deepToString(visited));
         System.out.println(sum);
     }
 
@@ -64,12 +65,11 @@ public class Main {
         while(!q.isEmpty()) {
             Node curr = q.poll();
             // int nd = curr.d;
+            // System.out.println("사방탐색" + curr.r + ", " + curr.c + ", " + curr.d);
             for(int i = 3; i >= 0; i--) {
-                // 이동은 -1 하고 넘어서면 3으로 리턴
                 int nd = valueCheck(curr.d + i);
                 int nr = curr.r + dr[nd];
                 int nc = curr.c + dc[nd];
-                if(nr < 0 || nr >= N || nc < 0 || nc >= N) continue;
                 if(!visited[nr][nc] && map[nr][nc] == 0) {
                     visited[nr][nc] = true;
                     q.offer(new Node(nr, nc, nd));
@@ -81,15 +81,26 @@ public class Main {
     }
     
     public static boolean back(int r, int c, int d) {
+        // System.out.println(r + ", " + c + ", " + d);
         int md = (d + 2) % 4;
         int nr = r + dr[md];
         int nc = c + dc[md];
         if(nr < 0 || nr >= N || nc < 0 || nc >= N || map[nr][nc] == 1) return false;
+        // System.out.println("들어오나??");
         q.offer(new Node(nr, nc, d));
         return true;
     }
 
     public static int valueCheck(int v) {
+        // 위 -> 왼 0 -> 3
+        // 왼 -> 아 3 -> 2
+        // 아 -> 오 2 -> 1
+        // 오 -> 위 1 -> 0
+        // 0 1 2 3
+        // 1 2 3 4
+        // 2 3 4 5
+        // 3 4 5 6
+        // 3 0 1 2
         if(v > 3) {
             v = v - 4;
         }
