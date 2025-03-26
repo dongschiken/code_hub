@@ -20,11 +20,9 @@ class Main {
         }
     }
     public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+        N = read();
+        M = read();
         
         dist = new int[N+1];
         path = new int[N+1];
@@ -33,10 +31,9 @@ class Main {
             graph.add(new ArrayList<>());
         }
         for(int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
+            int a = read();
+            int b = read();
+            int w = read();
             graph.get(a).add(new Node(b, w));
             graph.get(b).add(new Node(a, w));   
         }
@@ -71,4 +68,11 @@ class Main {
             }
         }
     }
+    
+    static int read() throws Exception {
+		int c, n = System.in.read() & 15;
+		while ((c = System.in.read()) >= 48)
+			n = (n << 3) + (n << 1) + (c & 15);
+		return n;
+	}
 }
