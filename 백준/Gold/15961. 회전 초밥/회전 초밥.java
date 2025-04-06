@@ -24,7 +24,7 @@ public class Main {
         int max = count;
         if(countArr[c] == 0) max++;
         
-        for(int i = 0; i < N; i++) {
+        for(int i = 0; i < N - 1; i++) {
             
             countArr[arr[i]]--;
             if(countArr[arr[i]] == 0) {
