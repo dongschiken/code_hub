@@ -17,7 +17,7 @@ public class Main {
         int l = 0;
         int r = 1;
         int cMax = 0;
-        while(l <= N && r <= N) {
+        while(r <= N) {
             int minus = sum[r] - sum[l];
             
             if(minus >= K) {
@@ -28,6 +28,11 @@ public class Main {
                 r++;
             }
         }
-        System.out.println(DP[N]);
+        
+        int answer = 0;
+        for(int dp : DP) {
+            answer = Math.max(dp, answer);
+        }
+        System.out.println(answer);
     }
 }
