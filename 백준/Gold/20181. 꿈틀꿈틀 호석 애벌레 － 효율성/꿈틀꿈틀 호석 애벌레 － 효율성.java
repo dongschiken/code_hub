@@ -8,17 +8,17 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
         
-        int[] sum = new int[N + 1];
-        int[] DP = new int[N + 1];
+        long[] sum = new long[N + 1];
+        long[] DP = new long[N + 1];
         st = new StringTokenizer(br.readLine());
         for(int i = 1; i <= N; i++) {
-            sum[i] = sum[i - 1] + Integer.parseInt(st.nextToken());
+            sum[i] = sum[i - 1] + Long.parseLong(st.nextToken());
         }
         int l = 0;
         int r = 1;
-        int cMax = 0;
+        long cMax = 0;
         while(r <= N) {
-            int minus = sum[r] - sum[l];
+            long minus = sum[r] - sum[l];
             
             if(minus >= K) {
                 cMax = Math.max(cMax, DP[l]);
@@ -29,8 +29,8 @@ public class Main {
             }
         }
         
-        int answer = 0;
-        for(int dp : DP) {
+        long answer = 0;
+        for(long dp : DP) {
             answer = Math.max(dp, answer);
         }
         System.out.println(answer);
