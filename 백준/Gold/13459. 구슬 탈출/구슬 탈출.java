@@ -46,7 +46,7 @@ public class Main {
                 }
             }
         }
-        q.offer(new Node(s[0], s[1], s[2], s[3], 1));
+        q.offer(new Node(s[0], s[1], s[2], s[3], 0));
         visited[s[0]][s[1]][s[2]][s[3]] = true;
         int result = simul() ? 1 : 0;
         System.out.println(result);
@@ -56,7 +56,7 @@ public class Main {
         while(!q.isEmpty()) {
             Node curr = q.poll();
             
-            if(curr.cnt > 10) {
+            if(curr.cnt >= 10) {
                 continue;
             }
             
