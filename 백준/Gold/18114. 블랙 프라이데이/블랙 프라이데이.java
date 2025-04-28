@@ -7,7 +7,6 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[] sum = new int[N * (N - 1) / 2];
         int[] arr = new int[N];
         Map<Integer, Integer> map = new HashMap<>();
         
@@ -26,13 +25,13 @@ public class Main {
         int idx = 0;
         for(int i = 0; i < N; i++) {
             for(int j = i + 1; j < N; j++) {
-                sum[idx++] = arr[i] + arr[j];
-                if(sum[idx - 1] == M) {
+                int sum = arr[i] + arr[j];
+                if(sum == M) {
                     System.out.println(1);
                     return;
                 }
-                if(map.get(M - sum[idx - 1]) != null) {
-                    if(map.get(M - sum[idx - 1]) != i && map.get(M - sum[idx - 1]) != j) {
+                if(map.get(M - sum) != null) {
+                    if(map.get(M - sum) != i && map.get(M - sum) != j) {
                         System.out.println(1);
                         return;
                     }
