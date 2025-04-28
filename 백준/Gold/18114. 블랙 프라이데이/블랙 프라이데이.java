@@ -8,19 +8,17 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
         int[] arr = new int[N];
-        Map<Integer, Integer> map = new HashMap<>();
-        
         st = new StringTokenizer(br.readLine());
         // 1
         for(int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
-            map.put(arr[i], i);
             if(M == arr[i]) {
                 System.out.println(1);
                 return;
             }
         }
         
+        Arrays.sort(arr);
         // 2
         int idx = 0;
         for(int i = 0; i < N; i++) {
@@ -30,16 +28,34 @@ public class Main {
                     System.out.println(1);
                     return;
                 }
-                if(map.get(M - sum) != null) {
-                    if(map.get(M - sum) != i && map.get(M - sum) != j) {
-                        System.out.println(1);
-                        return;
-                    }
+                // 이분탐색 진행해서 값이 나왔을 때 i != j != 
+                int index = binarysearch(N, arr, M - sum);
+                if(index != i && index != j && index != -1) {
+                    System.out.println(1);
+                    return;
                 }
             }
         }
         
         System.out.println(0);
         
+    }
+    
+    public static int binarysearch(int N, int[] arr, int target) {
+        int l = 0;
+        int r = N - 1;
+        while(l < r) {
+            int mid = (r + l) / 2;
+            
+            if(target == arr[mid]) {
+                return mid;
+            }
+            if(target < arr[mid]) {
+                r = mid - 1;
+            }else {
+                l = mid + 1;
+            }
+        }
+        return -1;
     }
 }
