@@ -1,16 +1,18 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
     
-    static int[] parent;
-    static class Edge implements Comparable<Edge> {
-        int from, to, d;
-        public Edge(int from, int to, int d) {
-            this.from = from;
-            this.to = to;
+    static int parents[];
+    public static class Edge implements Comparable<Edge> {
+        int a, b, d;
+        
+        public Edge(int a, int b, int d) {
+            this.a = a;
+            this.b = b;
             this.d = d;
         }
+        
         @Override
         public int compareTo(Edge other) {
             return Integer.compare(this.d, other.d);
@@ -18,56 +20,58 @@ public class Main {
     }
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        parent = new int[N + 1];
-        List<Edge> edges = new ArrayList<>();
-        for(int i = 1; i < N + 1; i++) {
-            parent[i] = i;
+        parents = new int[N + 1];
+        for(int i = 1; i <= N; i++) {
+            parents[i] = i;
         }
+        
         for(int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
-            int from = Integer.parseInt(st.nextToken());
-            int to = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
             int d = Integer.parseInt(st.nextToken());
-            edges.add(new Edge(from, to, d));
+            pq.offer(new Edge(a, b, d));
         }
         
-        Collections.sort(edges);
-        
-        int sum = 0;
         int cnt = 0;
-        for(Edge edge : edges) {
-            if(!union(edge.from, edge.to)) {
-                sum += edge.d;
+        int sum = 0;
+        while(!pq.isEmpty()) {
+            Edge edge = pq.poll();
+            int a = edge.a;
+            int b = edge.b;
+            int d = edge.d;
+            if(union(a, b)) {
                 cnt++;
-                if(cnt == M - 1) break;
+                sum += d;
+                if(cnt >= M - 1) break;
             }
         }
         System.out.println(sum);
     }
     
-    public static boolean isConnect(int x, int y) {
-        return find(x) == find(y);
-    }
-    public static boolean union(int x, int y) {
-        int pX = find(x);
-        int pY = find(y);
-        
-        if(pX == pY) return true;
-        
-        if(pX > pY) {
-            parent[pX] = pY;
-        } else {
-            parent[pY] = pX;
-        }
-        return false;
-    }
     public static int find(int x) {
-        if(parent[x] == x) {
-            return x;
+        if(x == parents[x]) return x;
+        return parents[x] = find(parents[x]);
+    }
+    
+    public static boolean union(int x, int y) {
+        x = find(x);
+        y = find(y);
+        
+        if(x == y) {
+            return false;
         }
-        return parent[x] = find(parent[x]);
+        
+        if(x > y) {
+            parents[x] = y;
+        } else {
+            parents[y] = x;
+        }
+        
+        return true;
     }
 }
