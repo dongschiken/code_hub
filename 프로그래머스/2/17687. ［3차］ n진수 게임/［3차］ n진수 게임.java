@@ -10,39 +10,38 @@ class Solution {
         map.put(13, "D");
         map.put(14, "E");
         map.put(15, "F");
-        // 0으로 시작
-        StringBuilder sb = new StringBuilder("0");
-        int num = 1;
-        while(sb.length() < t * m) {
-            sb.append(convert(num++, n, map));
+        StringBuilder sb = new StringBuilder();
+        sb.append("0");
+        int num = 0;
+        while(sb.length() < m * t) {
+            sb.append(changeNum(n, num++, map));
         }
-        // System.out.println(sb.toString());
+        int count = 0;
         String str = sb.toString();
         sb = new StringBuilder();
-        int count = 0;
         for(int i = 0; count < t; i++) {
-            if((i % m) == p - 1) {
+            // System.out.println((i % m) == p - 1);
+            if((i % m) == (p - 1)) {
                 sb.append(str.substring(i, i + 1));
                 count++;
             }
         }
-        // System.out.println(sb.toString());
         return answer = sb.toString();
     }
     
-    public String convert(int n, int m, Map<Integer, String> map) {
+    // 진수 변환
+    public String changeNum(int n, int m, Map<Integer, String> map) {
         StringBuilder sb = new StringBuilder();
-        while(n > 0) {
-            int x = n % m;
-            n = n / m;
-            if(x > 9) {
-                sb.append(map.get(x));
+        while(m > 0) {
+            int num = m % n;
+            m = m / n;
+            if(num > 9) {
+                sb.append(map.get(num));
             } else {
-                sb.append(String.valueOf(x));
+                sb.append(String.valueOf(num));
             }
         }
         sb.reverse();
-        // System.out.println(sb.toString());
         return sb.toString();
     }
 }
